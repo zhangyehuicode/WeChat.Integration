@@ -1,0 +1,11 @@
+﻿[
+  {
+    "CompanyCode": "VVCar",
+    "AccessToken": {
+      "access_token": "OdzWdgWOmiQfN2IVbvnOanfqr-SA1JrRMFHpnfYP_UbjP2-O1r2Bxs8x5JYWIMdi4gOGm8LRVG7e8iyrjkhEuILipkpUTP4u9whEw6itkLShJyt0E8qLXTotvdkrI-5UCFVfAEAKND",
+      "expires_in": 7200,
+      "ExpireDate": "2016-08-11T23:22:12.9935754+08:00"
+    },
+    "JsApiTicket": null
+  }
+]
