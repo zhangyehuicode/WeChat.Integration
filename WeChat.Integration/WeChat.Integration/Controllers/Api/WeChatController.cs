@@ -59,5 +59,21 @@ namespace WeChat.Integration.Controllers.Api
                 return weChatHelper.GetUserBasicInfo(openID);
             });
         }
+
+        /// <summary>
+        /// 根据js_code获取openid（小程序）
+        /// </summary>
+        /// <param name="companyCode"></param>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        [HttpGet, Route("GetUserBasicInfoOfMiniProgram")]
+        public JsonActionResult<WeChatUserInfo> GetUserBasicInfoOfMiniProgram(string companyCode, string code)
+        {
+            return SafeExecute(() =>
+            {
+                var weChatHelper = WeChatHelper.GetInstance($"{companyCode}_m");
+                return weChatHelper.GetUserBasicInfoOfMiniProgram(code);
+            });
+        }
     }
 }

@@ -21,6 +21,11 @@ namespace WeChat.Integration.Models
         public virtual string openid { get; set; }
 
         /// <summary>
+        /// 会话密钥（小程序）
+        /// </summary>
+        public virtual string session_key { get; set; }
+
+        /// <summary>
         /// 用户的昵称
         /// </summary>
         public virtual string nickname { get; set; }

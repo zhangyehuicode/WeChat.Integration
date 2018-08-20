@@ -3,5 +3,10 @@
     "CompanyCode": "VVCar",
     "AppID": "wxa92e0d709d1495d6",
     "AppSecret": "fe21ea80e8ae0a0d71e68f9d095389a5"
+  },
+  { //VV车_小程序
+    "CompanyCode": "VVCar_m",
+    "AppID": "wxf0f8dfc2350bdd01",
+    "AppSecret": "6c4fcf4dc0b1e5e64bae6192abf84a94"
   }
 ]

@@ -19,11 +19,12 @@ namespace WeChat.Integration.Helpers
         static DateTime Jan1st1970 = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
         const string URL_GetAccessToken = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={0}&secret={1}";
         const string URL_GetJsApiTicket = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token={0}&type=jsapi";
-        const string URL_GetAuthorize = "https://open.weixin.qq.com/connect/oauth2/authorize?appid={0}&redirect_uri={1}&response_type=code&scope={2}&state=yunmai#wechat_redirect";
+        const string URL_GetAuthorize = "https://open.weixin.qq.com/connect/oauth2/authorize?appid={0}&redirect_uri={1}&response_type=code&scope={2}&state=cheyinzi#wechat_redirect";
         const string URL_GetAuthAccessToken = "https://api.weixin.qq.com/sns/oauth2/access_token?appid={0}&secret={1}&code={2}&grant_type=authorization_code";
         const string URL_SendTemplate = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token={0}";
         const string URL_GetUserBasicInfo = "https://api.weixin.qq.com/cgi-bin/user/info?access_token={0}&openid={1}&lang=zh_CN";
         const string URL_GetUserSnsInfo = "https://api.weixin.qq.com/sns/userinfo?access_token={0}&openid={1}&lang=zh_CN";
+        const string URL_GetUserSnsInfoOfMiniProgram = "https://api.weixin.qq.com/sns/jscode2session?appid={0}&secret={1}&js_code={2}&grant_type=authorization_code";
         #endregion
 
         #region ctor.
@@ -239,7 +240,6 @@ namespace WeChat.Integration.Helpers
             {
                 var client = new HttpClient();
                 var tokenStr = client.GetStringAsync(url).Result;
-                //{"access_token":"ACCESS_TOKEN","expires_in":7200}
                 LogHelper.Debug(string.Format("Call WechatHelper.GetAccessTokenData. tokenStr[{0}]", tokenStr));
                 var accessToken = JsonConvert.DeserializeObject<WeChatAccessToken>(tokenStr);
                 if (accessToken == null)
@@ -309,7 +309,6 @@ namespace WeChat.Integration.Helpers
             {
                 var client = new HttpClient();
                 var jsApiTicketStr = client.GetStringAsync(url).Result;
-                //{"errcode":"0","errmsg":"ok","ticket":"bxLdikRXVbTPdHSM05e5u5sUoXNKd8-41ZO3MhKoyN5OfkWITDGgnr2fwJ0m9E8NYzWKVZvdVtaUgWvsdshFKA","expires_in":"7200"}
                 LogHelper.Debug(string.Format("Call WechatHelper.GetJsApiTicket. jsApiTicketStr[{0}]", jsApiTicketStr));
                 var jsApiTicket = JsonConvert.DeserializeObject<WeChatApiTicket>(jsApiTicketStr);
                 if (jsApiTicket == null)
@@ -370,7 +369,6 @@ namespace WeChat.Integration.Helpers
             {
                 var client = new HttpClient();
                 var tokenStr = client.GetStringAsync(url).Result;
-                //{"access_token":"OezXcEiiBSKSxW0eoylIeF7l1zoDrdnqMvNA2c0fxefljQI09aKhb5lzxlMUfdLqVmr8n6EI8SkAdXE1tYsxnx-e5VRQGj35rB7GvLsKUN05wUt6EDm2aJlY1Xoq2cdWolh6ArnMcAp8ZKtcZrzsUA","expires_in":7200,"refresh_token":"OezXcEiiBSKSxW0eoylIeF7l1zoDrdnqMvNA2c0fxefljQI09aKhb5lzxlMUfdLqa2kKyuAC9eyflwHK-XDhdMVaeB4oQJ2rj9ByltrfJLjepP-BWlHB8Wtdm7aEs69EIlg4zswhaWqn-A-weQif6A","openid":"ozhR3jpxd8d-0TxWMM_uubQYMLoo","scope":"snsapi_base"}
                 LogHelper.Debug(string.Format("Call WechatHelper.GetAuthAccessToken. tokenStr[{0}]", tokenStr));
                 var accessToken = JsonConvert.DeserializeObject<WeChatUserAuthAccessToken>(tokenStr);
                 if (accessToken == null)
@@ -398,21 +396,6 @@ namespace WeChat.Integration.Helpers
             {
                 var client = new HttpClient();
                 var userInfoResponse = client.GetStringAsync(url).Result;
-                //{
-                //    "subscribe": 1, 
-                //    "openid": "odEDBjmoJKiQCZx3tM3GPDeBmLUI", 
-                //    "nickname": "刘凯", 
-                //    "sex": 1, 
-                //    "language": "zh_CN", 
-                //    "city": "厦门", 
-                //    "province": "福建", 
-                //    "country": "中国", 
-                //    "headimgurl": "http://wx.qlogo.cn/mmopen/80h2Yx4qUfqwSgKw9THfeYxCvicVfwQyCdOxiawicibR3mg6o9lZeA4ibGrMPpf3UjZz0icgibeTzQZOG8VZvv8icC43PA/0", 
-                //    "subscribe_time": 1465958412, 
-                //    "remark": "", 
-                //    "groupid": 0, 
-                //    "tagid_list": [ ]
-                //}
                 LogHelper.Debug(string.Format("Call WechatHelper.GetUserBasicInfo. userInfoResponse[{0}]", userInfoResponse));
                 var result = JsonConvert.DeserializeObject<WeChatUserInfo>(userInfoResponse);
                 return result;
@@ -437,17 +420,6 @@ namespace WeChat.Integration.Helpers
             {
                 var client = new HttpClient();
                 var userInfoResponse = client.GetStringAsync(url).Result;
-                //{
-                //    "openid": "odEDBjmoJKiQCZx3tM3GPDeBmLUI", 
-                //    "nickname": "刘凯", 
-                //    "sex": 1, 
-                //    "city": "厦门", 
-                //    "province": "福建", 
-                //    "country": "中国", 
-                //    "headimgurl": "http://wx.qlogo.cn/mmopen/80h2Yx4qUfqwSgKw9THfeYxCvicVfwQyCdOxiawicibR3mg6o9lZeA4ibGrMPpf3UjZz0icgibeTzQZOG8VZvv8icC43PA/0", 
-                //    "privilege": [ ],
-                //    "unionid": 0
-                //}
                 LogHelper.Debug(string.Format("Call WechatHelper.GetUserSnsInfo. userInfoResponse[{0}]", userInfoResponse));
                 var result = JsonConvert.DeserializeObject<WeChatUserSnsInfo>(userInfoResponse);
                 return result;
@@ -511,6 +483,30 @@ namespace WeChat.Integration.Helpers
             LogHelper.Debug($"调用JsApiSignature生成数据[{jsApiSignature.ToString()}]");
             return jsApiSignature;
         }
+
+        /// <summary>
+        /// 根据js_code获取openid（小程序）
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        public WeChatUserInfo GetUserBasicInfoOfMiniProgram(string code)
+        {
+            var url = string.Format(URL_GetUserSnsInfoOfMiniProgram, CurrentMchConfig.AppID, CurrentMchConfig.AppSecret, code);
+            try
+            {
+                var client = new HttpClient();
+                var userInfoResponse = client.GetStringAsync(url).Result;
+                LogHelper.Debug(string.Format("Call WechatHelper.GetUserBasicInfoOfMiniProgram. userInfoResponse[{0}]", userInfoResponse));
+                var result = JsonConvert.DeserializeObject<WeChatUserInfo>(userInfoResponse);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error("GetUserBasicInfoOfMiniProgram 出现错误.", ex);
+            }
+            return null;
+        }
+
         #endregion
     }
 }
